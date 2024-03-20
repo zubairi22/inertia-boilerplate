@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -22,7 +23,9 @@ class UsersController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Master/User/Create');
+        return Inertia::render('Master/User/Create' , [
+            'roles' => Role::all()
+        ]);
     }
 
     public function store(UserCreateRequest $request): RedirectResponse
@@ -33,7 +36,7 @@ class UsersController extends Controller
             'password' => $request->get('password'),
         ]);
 
-        return Redirect::route('users.index')->with('success', 'Tambah Pengguna Berhasil.');
+        return Redirect::route('master.users.index')->with('success', 'Tambah Pengguna Berhasil.');
     }
 
 
@@ -41,6 +44,7 @@ class UsersController extends Controller
     {
         return Inertia::render('Master/User/Edit', [
             'user' => $user,
+            'roles' => Role::all()
         ]);
     }
 
@@ -52,7 +56,7 @@ class UsersController extends Controller
             $user->update(['password' => $request->input('password')]);
         }
 
-        return Redirect::route('users.index')->with('success', 'Update Pengguna Berhasil.');
+        return Redirect::route('master.users.index')->with('success', 'Update Pengguna Berhasil.');
     }
 
     public function destroy(User $user): RedirectResponse

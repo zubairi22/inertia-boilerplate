@@ -37,7 +37,7 @@ const deleteUser = (user) => {
         showCancelButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            router.delete(route('users.destroy' , user))
+            router.delete(route('master.users.destroy' , user))
         }
     });
 }
@@ -48,7 +48,7 @@ watch(() => form.search, () => {
 </script>
 
 <template>
-    <Head title="Dashboard"/>
+    <Head title="Pengguna"/>
 
     <AuthenticatedLayout>
         <template #header>
@@ -61,7 +61,7 @@ watch(() => form.search, () => {
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <div class="flex justify-between">
                             <div>
-                                <LinkButton class="px-4" :href="route('users.create')">Tambah Pengguna</LinkButton>
+                                <LinkButton class="px-4" :href="route('master.users.create')">Tambah Pengguna</LinkButton>
                             </div>
                             <div class="md:text-right mb-3">
                                 <input
@@ -90,7 +90,7 @@ watch(() => form.search, () => {
                                     <td class="px-4 py-4">{{ user.name }}</td>
                                     <td class="px-4 py-4">{{ user.email }}</td>
                                     <td>
-                                        <LinkButton class="bg-yellow-600 dark:bg-yellow-500" :href="route('users.edit', user)">
+                                        <LinkButton class="bg-yellow-600 dark:bg-yellow-500" :href="route('master.users.edit', user)">
                                             <CorrectionSVG/>
                                         </LinkButton>
                                     </td>

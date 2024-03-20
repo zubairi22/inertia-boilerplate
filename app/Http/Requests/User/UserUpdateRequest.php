@@ -12,7 +12,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($this->route('user')->id)],
-            'password' => ['nullable']
+            'password' => ['nullable'],
+            'role' => ['required']
         ];
     }
 }

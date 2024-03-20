@@ -1,5 +1,5 @@
 <script setup>
-import {inject, ref, watch} from 'vue';
+import {ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -16,6 +16,7 @@ import FlashMessages from "@/Components/FlashMessages.vue";
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const showingNavigationDropdown = ref(false);
+const menus = usePage().props.menus
 </script>
 
 <template>
@@ -37,22 +38,30 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
-                                <NavButton :active="route().current('users.*')">
-                                    <div class="relative">
-                                        <Dropdown>
-                                            <template #trigger>
-                                                <DropdownButton>Data Master</DropdownButton>
-                                            </template>
+                                <template v-for="menu in menus">
+                                    <template v-if="menu.children.length === 0">
+                                        <NavLink :href="route(`${menu.url}`)" :active="route().current(`${menu.url}`)">
+                                            {{ menu.title }}
+                                        </NavLink>
+                                    </template>
+                                    <template v-else>
+                                        <NavButton :active="route().current(`${menu.url}.*`)">
+                                            <div class="relative">
+                                                <Dropdown>
+                                                    <template #trigger>
+                                                        <DropdownButton>{{ menu.title }}</DropdownButton>
+                                                    </template>
 
-                                            <template #content>
-                                                <DropdownLink :href="route('users.index')">User</DropdownLink>
-                                            </template>
-                                        </Dropdown>
-                                    </div>
-                                </NavButton>
+                                                    <template #content>
+                                                        <DropdownLink v-for="m in menu.children"
+                                                                      :href="route(`${m.url}`)">{{ m.title }}
+                                                        </DropdownLink>
+                                                    </template>
+                                                </Dropdown>
+                                            </div>
+                                        </NavButton>
+                                    </template>
+                                </template>
                             </div>
                         </div>
 
@@ -151,7 +160,7 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('users.index')" :active="route().current('users.*')">
+                        <ResponsiveNavLink :href="route('master.users.index')" :active="route().current('master.*')">
                             Users
                         </ResponsiveNavLink>
                     </div>

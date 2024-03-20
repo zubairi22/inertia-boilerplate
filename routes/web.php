@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UtilityController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,7 +25,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('users', UsersController::class);
+    Route::name('master.')->group(function () {
+        Route::resource('users', UsersController::class);
+
+        Route::get('utility', [UtilityController::class, 'index'])->name('utility.index');
+        Route::post('utility/role', [UtilityController::class, 'storeRole'])->name('utility.role.store');
+        Route::delete('utility/role/{role}', [UtilityController::class, 'destroyRole'])->name('utility.role.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
