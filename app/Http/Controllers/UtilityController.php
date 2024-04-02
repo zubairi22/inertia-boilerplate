@@ -16,7 +16,7 @@ class UtilityController extends Controller
     public function index(): Response
     {
         return Inertia::render('Master/Utility/Index', [
-            'roles' => Role::all(),
+            'roles' => Role::paginate(10),
             'menus' => Menu::whereNull('parent_id')->get()
         ]);
     }
