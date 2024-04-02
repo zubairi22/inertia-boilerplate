@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Role\RoleCreateRequest;
+use App\Models\Menu;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class UtilityController extends Controller
     public function index(): Response
     {
         return Inertia::render('Master/Utility/Index', [
-            'roles' => Role::paginate(15)
+            'roles' => Role::all(),
+            'menus' => Menu::whereNull('parent_id')->get()
         ]);
     }
 

@@ -11,7 +11,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import NavButton from "@/Components/NavButton.vue";
 import DropdownButton from "@/Components/DropdownButton.vue";
 import InstagramLogo from "@/Components/Svg/InstagramLogo.vue";
-import FlashMessages from "@/Components/FlashMessages.vue";
+import Toaster from "@/Components/Toaster.vue";
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -20,71 +20,70 @@ const menus = usePage().props.menus
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-white dark:bg-gray-800">
-            <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-                <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
-                                    />
-                                </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <template v-for="menu in menus">
-                                    <template v-if="menu.children.length === 0">
-                                        <NavLink :href="route(`${menu.url}`)" :active="route().current(`${menu.url}`)">
-                                            {{ menu.title }}
-                                        </NavLink>
-                                    </template>
-                                    <template v-else>
-                                        <NavButton :active="route().current(`${menu.url}.*`)">
-                                            <div class="relative">
-                                                <Dropdown>
-                                                    <template #trigger>
-                                                        <DropdownButton>{{ menu.title }}</DropdownButton>
-                                                    </template>
-
-                                                    <template #content>
-                                                        <DropdownLink v-for="m in menu.children"
-                                                                      :href="route(`${m.url}`)">{{ m.title }}
-                                                        </DropdownLink>
-                                                    </template>
-                                                </Dropdown>
-                                            </div>
-                                        </NavButton>
-                                    </template>
-                                </template>
-                            </div>
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900 bg-topography-darker">
+        <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+            <!-- Primary Navigation Menu -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <!-- Logo -->
+                        <div class="shrink-0 flex items-center">
+                            <Link :href="route('dashboard')">
+                                <ApplicationLogo
+                                    class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                />
+                            </Link>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <!-- Theme -->
-                            <SecondaryButton
-                                @click="toggleDark()"
-                            >
-                                <svg v-if="isDark" class="w-4 h-4" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-11a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1Zm0 12a1 1 0 0 0-1 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1-1ZM4.343 5.757a1 1 0 0 0 1.414-1.414L4.343 2.929a1 1 0 0 0-1.414 1.414l1.414 1.414Zm11.314 8.486a1 1 0 0 0-1.414 1.414l1.414 1.414a1 1 0 0 0 1.414-1.414l-1.414-1.414ZM4 10a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1Zm15-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2ZM4.343 14.243l-1.414 1.414a1 1 0 1 0 1.414 1.414l1.414-1.414a1 1 0 0 0-1.414-1.414ZM14.95 6.05a1 1 0 0 0 .707-.293l1.414-1.414a1 1 0 1 0-1.414-1.414l-1.414 1.414a1 1 0 0 0 .707 1.707Z"></path>
-                                </svg>
-                                <svg v-else class="w-4 h-4" aria-hidden="true"
-                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                    <path
-                                        d="M17.8 13.75a1 1 0 0 0-.859-.5A7.488 7.488 0 0 1 10.52 2a1 1 0 0 0 0-.969A1.035 1.035 0 0 0 9.687.5h-.113a9.5 9.5 0 1 0 8.222 14.247 1 1 0 0 0 .004-.997Z"></path>
-                                </svg>
-                            </SecondaryButton>
-                            <!-- Settings Dropdown -->
-                            <div class="ms-3 relative">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
+                        <!-- Navigation Links -->
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <template v-for="menu in menus">
+                                <template v-if="menu.children.length === 0">
+                                    <NavLink :href="route(`${menu.url}`)" :active="route().current(`${menu.url}`)">
+                                        {{ menu.title }}
+                                    </NavLink>
+                                </template>
+                                <template v-else>
+                                    <NavButton :active="route().current(`${menu.url}.*`)">
+                                        <div class="relative">
+                                            <Dropdown>
+                                                <template #trigger>
+                                                    <DropdownButton>{{ menu.title }}</DropdownButton>
+                                                </template>
+
+                                                <template #content>
+                                                    <DropdownLink v-for="m in menu.children"
+                                                                  :href="route(`${m.url}`)">{{ m.title }}
+                                                    </DropdownLink>
+                                                </template>
+                                            </Dropdown>
+                                        </div>
+                                    </NavButton>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <!-- Settings Dropdown -->
+                        <SecondaryButton
+                            @click="toggleDark()"
+                        >
+                            <svg v-if="isDark" id="theme-toggle-light-icon" class="w-4 h-4" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-11a1 1 0 0 0 1-1V1a1 1 0 0 0-2 0v2a1 1 0 0 0 1 1Zm0 12a1 1 0 0 0-1 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1-1ZM4.343 5.757a1 1 0 0 0 1.414-1.414L4.343 2.929a1 1 0 0 0-1.414 1.414l1.414 1.414Zm11.314 8.486a1 1 0 0 0-1.414 1.414l1.414 1.414a1 1 0 0 0 1.414-1.414l-1.414-1.414ZM4 10a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h2a1 1 0 0 0 1-1Zm15-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2ZM4.343 14.243l-1.414 1.414a1 1 0 1 0 1.414 1.414l1.414-1.414a1 1 0 0 0-1.414-1.414ZM14.95 6.05a1 1 0 0 0 .707-.293l1.414-1.414a1 1 0 1 0-1.414-1.414l-1.414 1.414a1 1 0 0 0 .707 1.707Z"></path>
+                            </svg>
+                            <svg v-else id="theme-toggle-dark-icon" class="w-4 h-4" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                <path
+                                    d="M17.8 13.75a1 1 0 0 0-.859-.5A7.488 7.488 0 0 1 10.52 2a1 1 0 0 0 0-.969A1.035 1.035 0 0 0 9.687.5h-.113a9.5 9.5 0 1 0 8.222 14.247 1 1 0 0 0 .004-.997Z"></path>
+                            </svg>
+                        </SecondaryButton>
+
+                        <div class="ms-3 relative">
+                            <Dropdown align="right" width="48">
+                                <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
@@ -106,122 +105,93 @@ const menus = usePage().props.menus
                                                 </svg>
                                             </button>
                                         </span>
-                                    </template>
+                                </template>
 
-                                    <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
+                                <template #content>
+                                    <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
+                                    <DropdownLink :href="route('logout')" method="post" as="button">
+                                        Log Out
+                                    </DropdownLink>
+                                </template>
+                            </Dropdown>
                         </div>
+                    </div>
 
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
-                            >
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        :class="{
+                    <!-- Hamburger -->
+                    <div class="-me-2 flex items-center sm:hidden">
+                        <button
+                            @click="showingNavigationDropdown = !showingNavigationDropdown"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
+                        >
+                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <path
+                                    :class="{
                                             hidden: showingNavigationDropdown,
                                             'inline-flex': !showingNavigationDropdown,
                                         }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
+                                <path
+                                    :class="{
                                             hidden: !showingNavigationDropdown,
                                             'inline-flex': showingNavigationDropdown,
                                         }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                    class="sm:hidden"
-                >
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('master.users.index')" :active="route().current('master.*')">
-                            Users
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                        <div class="px-4">
-                            <div class="font-medium text-base text-gray-800 dark:text-gray-200">
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Page Heading -->
-            <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header"/>
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main class="bg-gray-100 dark:bg-gray-900 bg-topography-darker" style="min-height: 60vh">
-                <FlashMessages/>
-                <slot/>
-            </main>
-
-            <footer class="bg-white dark:bg-gray-800">
-                <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-                    <div class="md:flex md:justify-between">
-                        <div class="mb-6 md:mb-0">
-                            <a href="/" class="flex items-center">
-                                <ApplicationLogo
-                                    class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
                                 />
-                            </a>
-                        </div>
-                    </div>
-                    <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"/>
-                    <div class="sm:flex sm:items-center sm:justify-between">
-                        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-                            Z Dev Studio
-                        </span>
-                        <div class="flex mt-4 space-x-5 sm:justify-center sm:mt-0">
-                            <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                                <InstagramLogo/>
-                            </a>
-                        </div>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-            </footer>
-        </div>
+            </div>
+
+            <!-- Responsive Navigation Menu -->
+            <div
+                :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+                class="sm:hidden"
+            >
+                <div class="pt-2 pb-3 space-y-1">
+                    <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        Dashboard
+                    </ResponsiveNavLink>
+                </div>
+
+                <!-- Responsive Settings Options -->
+                <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                    <div class="px-4">
+                        <div class="font-medium text-base text-gray-800 dark:text-gray-200">
+                            {{ $page.props.auth.user.name }}
+                        </div>
+                        <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                    </div>
+
+                    <div class="mt-3 space-y-1">
+                        <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                            Log Out
+                        </ResponsiveNavLink>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Heading -->
+        <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <slot name="header"/>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main>
+            <Toaster/>
+            <slot/>
+        </main>
     </div>
 </template>
 
